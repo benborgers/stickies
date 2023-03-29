@@ -1,9 +1,10 @@
+import { useRef } from "react";
 import { useStore } from "@nanostores/react";
+import classNames from "classnames";
 import Auth from "./Auth";
 import LogOut from "./LogOut";
 import useUser from "../hooks/useUser";
 import notesStore, { createNote } from "../stores/notes";
-import { useRef } from "react";
 
 export default function () {
   const { user } = useUser();
@@ -16,7 +17,7 @@ export default function () {
       <LogOut />
 
       <div
-        className="min-h-screen relative bg-red-100 h-full"
+        className="min-h-screen relative h-full"
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
@@ -26,7 +27,11 @@ export default function () {
         {notes.map((note) => (
           <textarea
             key={note.id}
-            className="absolute bg-yellow-100 0 h-72 w-72 shadow-sm border border-yellow-200 resize-none focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors"
+            className={classNames(
+              "absolute bg-yellow-100 h-72 w-72 shadow-sm border border-yellow-200 resize-none",
+              "focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors",
+              "text-yellow-950 p-3"
+            )}
             style={{ left: note.x, top: note.y }}
           ></textarea>
         ))}
