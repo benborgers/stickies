@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { motion } from "framer-motion";
+import Input from "./Input";
 
 type Mode = "login" | "signup";
 const Modes: Mode[] = ["login", "signup"];
@@ -15,26 +15,20 @@ export default function () {
 
   return (
     <div className="fixed inset-0 bg-black/30 grid place-items-center z-50">
-      <div className="w-full max-w-md rounded-2xl shadow bg-white p-4">
+      <div className="w-full max-w-md rounded-2xl shadow bg-white p-5">
         <div className="grid grid-cols-2 gap-x-2">
           {Modes.map((mode) => (
             <button
               key={mode}
               className={classNames(
-                "block relative py-1.5 font-medium transition-colors hover:bg-gray-100 rounded-lg",
+                "block relative py-1.5 font-medium transition-colors rounded-lg text-sm",
                 {
-                  "text-yellow-950": currentMode === mode,
-                  "text-gray-500": currentMode !== mode,
+                  "bg-yellow-400 text-yellow-950": currentMode === mode,
+                  "bg-gray-100 text-gray-500": currentMode !== mode,
                 }
               )}
               onClick={() => setCurrentMode(mode)}
             >
-              {currentMode === mode && (
-                <motion.div
-                  className="bg-gradient-to-b from-yellow-400 to-yellow-500 rounded-lg absolute inset-0 z-40"
-                  layoutId="highlight"
-                />
-              )}
               <span className="relative z-50 [text-shadow:0_0_4px_rgba(255,255,255,0.5)]">
                 {prettyMode(mode)}
               </span>
@@ -42,7 +36,18 @@ export default function () {
           ))}
         </div>
 
-        <form></form>
+        <form className="mt-6 space-y-4">
+          <Input label="Email" type="email" />
+          <Input label="Password" type="password" />
+          {currentMode === "login" && (
+            <Input label="Password confirmation" type="password" />
+          )}
+          <div className="flex justify-end pt-2">
+            <button className="px-4 py-1.5 bg-yellow-400 rounded-lg text-sm font-medium text-yellow-950">
+              {prettyMode(currentMode)}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
