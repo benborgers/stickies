@@ -21,7 +21,7 @@ export default function () {
             <button
               key={mode}
               className={classNames(
-                "block relative py-1 font-medium transition-colors hover:bg-gray-100 rounded-lg",
+                "block relative py-1.5 font-medium transition-colors hover:bg-gray-100 rounded-lg",
                 {
                   "text-yellow-950": currentMode === mode,
                   "text-gray-500": currentMode !== mode,
@@ -31,11 +31,13 @@ export default function () {
             >
               {currentMode === mode && (
                 <motion.div
-                  className="bg-yellow-400 rounded-lg absolute inset-0 z-40"
+                  className="bg-gradient-to-b from-yellow-400 to-yellow-500 rounded-lg absolute inset-0 z-40"
                   layoutId="highlight"
                 />
               )}
-              <span className="relative z-50">{prettyMode(mode)}</span>
+              <span className="relative z-50 [text-shadow:0_0_4px_rgba(255,255,255,0.5)]">
+                {prettyMode(mode)}
+              </span>
             </button>
           ))}
         </div>
