@@ -9,7 +9,7 @@ export default function () {
   return (
     <AnimatePresence>
       {user && (
-        <motion.div className="fixed top-4 right-4">
+        <motion.div className="fixed top-3 right-3">
           <button
             className="bg-gradient-to-b from-yellow-400 to-yellow-500 text-yellow-950 text-sm font-medium px-3 py-1 rounded-lg shadow-sm"
             onClick={() => {

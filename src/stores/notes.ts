@@ -7,6 +7,8 @@ const pb = new PocketBase("https://pb-stickies.elk.sh");
 const notes = atom<Note[]>([]);
 export default notes;
 
+const updateNoteKeyDebounceTimeouts: Record<string, number> = {};
+
 export const updateNoteKey = (
   noteId: string,
   key: keyof Note,
@@ -23,6 +25,12 @@ export const updateNoteKey = (
       return note;
     })
   );
+
+  const debounceKey = `${noteId}-${key}`;
+  clearTimeout(updateNoteKeyDebounceTimeouts[debounceKey]);
+  updateNoteKeyDebounceTimeouts[debounceKey] = setTimeout(() => {
+    pb.collection("notes").update(noteId, { [key]: value });
+  }, 300);
 };
 
 export const createNote = ({ x, y }: { x: number; y: number }) => {

@@ -3,8 +3,7 @@ import classNames from "classnames";
 import { X } from "phosphor-react";
 import Auth from "./Auth";
 import LogOut from "./LogOut";
-import useUser from "../hooks/useUser";
-import { createNote, deleteNote } from "../stores/notes";
+import { createNote, deleteNote, updateNoteKey } from "../stores/notes";
 import useNotes from "../hooks/useNotes";
 
 export default function () {
@@ -42,6 +41,10 @@ export default function () {
                 "focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors",
                 "text-yellow-950 p-3"
               )}
+              value={note.text}
+              onChange={(e) => {
+                updateNoteKey(note.id, "text", e.target.value);
+              }}
             ></textarea>
             <button
               className="absolute top-1.5 right-1.5 p-1"
