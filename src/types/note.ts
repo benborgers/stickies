@@ -3,6 +3,8 @@ type Note = {
   text: string;
   x: number;
   y: number;
+  z: number;
+  user: string;
 };
 
 export default Note;

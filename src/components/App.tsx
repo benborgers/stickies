@@ -1,14 +1,14 @@
 import { useRef } from "react";
-import { useStore } from "@nanostores/react";
 import classNames from "classnames";
+import { X } from "phosphor-react";
 import Auth from "./Auth";
 import LogOut from "./LogOut";
 import useUser from "../hooks/useUser";
-import notesStore, { createNote } from "../stores/notes";
+import { createNote, deleteNote } from "../stores/notes";
+import useNotes from "../hooks/useNotes";
 
 export default function () {
-  const { user } = useUser();
-  const notes = useStore(notesStore);
+  const notes = useNotes();
   const container = useRef(null);
 
   const lastContainerClick = useRef(0);
@@ -31,15 +31,32 @@ export default function () {
         }}
       >
         {notes.map((note) => (
-          <textarea
+          <div
             key={note.id}
-            className={classNames(
-              "absolute bg-yellow-100 h-72 w-72 shadow-sm border border-yellow-200 resize-none",
-              "focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors",
-              "text-yellow-950 p-3"
-            )}
-            style={{ left: note.x, top: note.y }}
-          ></textarea>
+            className="absolute"
+            style={{ left: note.x, top: note.y, zIndex: note.z }}
+          >
+            <textarea
+              className={classNames(
+                "bg-yellow-100 h-72 w-72 shadow-sm border border-yellow-200 resize-none",
+                "focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors",
+                "text-yellow-950 p-3"
+              )}
+            ></textarea>
+            <button
+              className="absolute top-1.5 right-1.5 p-1"
+              onClick={() => {
+                if (confirm("Delete note?")) {
+                  deleteNote(note.id);
+                }
+              }}
+            >
+              <X
+                weight="bold"
+                className="text-yellow-300 hover:text-yellow-500 transition-colors"
+              />
+            </button>
+          </div>
         ))}
       </div>
     </div>
