@@ -43,6 +43,8 @@ export default function () {
   );
 }
 function Note({ note }: { note: Note }) {
+  const mouseDown = useRef(false);
+
   return (
     <div
       data-note-id={note.id}
@@ -52,7 +54,18 @@ function Note({ note }: { note: Note }) {
         top: note.y,
         zIndex: note.z,
       }}
-      onMouseDown={() => makeNoteHaveHighestZ(note.id)}
+      onMouseDown={() => {
+        makeNoteHaveHighestZ(note.id);
+        mouseDown.current = true;
+      }}
+      onMouseUp={() => {
+        mouseDown.current = false;
+      }}
+      onMouseMove={(event) => {
+        if (!mouseDown.current) return;
+        updateNoteKey(note.id, "x", event.pageX, { persist: false });
+        updateNoteKey(note.id, "y", event.pageY, { persist: false });
+      }}
     >
       <textarea
         className={classNames(
