@@ -9,11 +9,14 @@ export default notes;
 
 const updateNoteKeyDebounceTimeouts: Record<string, number> = {};
 
+type UpdateNoteKeyOptions = {
+  persist?: boolean;
+};
 export const updateNoteKey = (
   noteId: string,
   key: keyof Note,
   value: Note[typeof key],
-  options: { persist?: boolean } = { persist: false }
+  options?: UpdateNoteKeyOptions
 ) => {
   notes.set(
     notes.get().map((note) => {
@@ -27,7 +30,7 @@ export const updateNoteKey = (
     })
   );
 
-  if (options.persist) {
+  if (options?.persist ?? true) {
     const debounceKey = `${noteId}-${key}`;
     clearTimeout(updateNoteKeyDebounceTimeouts[debounceKey]);
     updateNoteKeyDebounceTimeouts[debounceKey] = setTimeout(() => {
@@ -49,12 +52,13 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
   };
 
   notes.set([...notes.get(), note]);
-  makeNoteHaveHighestZ(tempId);
+  makeNoteHaveHighestZ(tempId, { persist: false });
 
   pb.collection("notes")
     .create({ ...note, id: null })
     .then((result) => {
       updateNoteKey(tempId, "id", result.id, { persist: false });
+      makeNoteHaveHighestZ(result.id);
     });
 };
 
@@ -63,10 +67,13 @@ export const deleteNote = (noteId: string) => {
   pb.collection("notes").delete(noteId);
 };
 
-export const makeNoteHaveHighestZ = (noteId: string) => {
+export const makeNoteHaveHighestZ = (
+  noteId: string,
+  options?: UpdateNoteKeyOptions
+) => {
   const sortedNotes = notes.get().sort((a, b) => a.z - b.z);
   for (let i = 0; i < sortedNotes.length; i++) {
-    updateNoteKey(sortedNotes[i].id, "z", i);
+    updateNoteKey(sortedNotes[i].id, "z", i, options);
   }
-  updateNoteKey(noteId, "z", sortedNotes.length);
+  updateNoteKey(noteId, "z", sortedNotes.length, options);
 };
