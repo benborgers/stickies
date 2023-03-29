@@ -1,6 +1,10 @@
 import { useState } from "react";
 import classNames from "classnames";
 import Input from "./Input";
+import usePocketBase from "../hooks/usePocketBase";
+import { CircleNotch } from "phosphor-react";
+import catchPocketBase from "../util/catchPocketBase";
+import useUser from "../hooks/useUser";
 
 type Mode = "login" | "signup";
 const Modes: Mode[] = ["login", "signup"];
@@ -11,7 +15,40 @@ const prettyMode = (mode: Mode): string =>
   }[mode]);
 
 export default function () {
+  const pb = usePocketBase();
+  const { refreshUser } = useUser();
+
   const [currentMode, setCurrentMode] = useState<Mode>("login");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    if (currentMode === "login") {
+      await catchPocketBase(async () => {
+        await pb.collection("users").authWithPassword(email, password);
+      });
+    }
+
+    if (currentMode === "signup") {
+      await catchPocketBase(async () => {
+        await pb.collection("users").create({
+          email,
+          password,
+          passwordConfirm: passwordConfirmation,
+        });
+      });
+    }
+
+    refreshUser();
+    setLoading(false);
+  }
 
   return (
     <div className="fixed inset-0 bg-black/30 grid place-items-center z-50">
@@ -36,15 +73,47 @@ export default function () {
           ))}
         </div>
 
-        <form className="mt-6 space-y-4">
-          <Input label="Email" type="email" />
-          <Input label="Password" type="password" />
-          {currentMode === "login" && (
-            <Input label="Password confirmation" type="password" />
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {currentMode === "signup" && (
+            <Input
+              label="Password confirmation"
+              type="password"
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              required
+            />
           )}
           <div className="flex justify-end pt-2">
-            <button className="px-4 py-1.5 bg-yellow-400 rounded-lg text-sm font-medium text-yellow-950">
-              {prettyMode(currentMode)}
+            <button className="block relative px-4 py-1.5 bg-yellow-400 rounded-lg text-sm font-medium text-yellow-950">
+              <span
+                className={classNames("relative transition-opacity", {
+                  "opacity-0": loading,
+                })}
+              >
+                {prettyMode(currentMode)}
+              </span>
+              <div
+                className={classNames(
+                  "absolute inset-0 grid place-items-center transition-opacity animate-spin",
+                  { "opacity-0": !loading }
+                )}
+              >
+                <CircleNotch weight="bold" size={15} />
+              </div>
             </button>
           </div>
         </form>

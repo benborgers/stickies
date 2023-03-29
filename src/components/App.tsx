@@ -4,7 +4,7 @@ import Auth from "./Auth";
 
 export default function () {
   const pb = usePocketBase();
-  const user = useUser();
+  const { user } = useUser();
 
   return (
     <div>

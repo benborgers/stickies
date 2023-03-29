@@ -12,5 +12,9 @@ export default function () {
     return unsubscribe;
   }, []);
 
-  return user;
+  function refreshUser() {
+    setUser(pb.authStore.model);
+  }
+
+  return { user, refreshUser };
 }
