@@ -56,8 +56,8 @@ function Note({ note }: { note: Note }) {
     >
       <textarea
         className={classNames(
-          "bg-yellow-100 h-72 w-72 shadow-sm border border-yellow-200 resize-none",
-          "focus:border-2 focus:border-yellow-300 focus:ring-0 transition-colors",
+          "bg-yellow-100 h-72 w-72 shadow-sm outline outline-yellow-200 resize-none",
+          "focus:outline-2 focus:outline-yellow-300 focus:outline-offset-0 border-none focus:ring-0",
           "text-yellow-950 p-3"
         )}
         value={note.text}
