@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useStore } from "@nanostores/react";
 import usePocketBase from "./usePocketBase";
+import userStore from "../stores/user";
+import type User from "../types/user";
 
 export default function () {
   const pb = usePocketBase();
-  const [user, setUser] = useState(pb.authStore.model);
+  const user = useStore(userStore);
 
   useEffect(() => {
-    const unsubscribe = pb.authStore.onChange(() => {
-      setUser(pb.authStore.model);
-    });
-    return unsubscribe;
+    userStore.set(pb.authStore.model as User);
   }, []);
 
   function refreshUser() {
-    setUser(pb.authStore.model);
+    userStore.set(pb.authStore.model as User);
   }
 
   return { user, refreshUser };

@@ -43,6 +43,7 @@ export default function () {
           password,
           passwordConfirm: passwordConfirmation,
         });
+        await pb.collection("users").authWithPassword(email, password);
       });
     }
 
