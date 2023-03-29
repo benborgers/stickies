@@ -12,7 +12,8 @@ const updateNoteKeyDebounceTimeouts: Record<string, number> = {};
 export const updateNoteKey = (
   noteId: string,
   key: keyof Note,
-  value: Note[typeof key]
+  value: Note[typeof key],
+  options: { persist?: boolean } = { persist: false }
 ) => {
   notes.set(
     notes.get().map((note) => {
@@ -26,11 +27,13 @@ export const updateNoteKey = (
     })
   );
 
-  const debounceKey = `${noteId}-${key}`;
-  clearTimeout(updateNoteKeyDebounceTimeouts[debounceKey]);
-  updateNoteKeyDebounceTimeouts[debounceKey] = setTimeout(() => {
-    pb.collection("notes").update(noteId, { [key]: value });
-  }, 300);
+  if (options.persist) {
+    const debounceKey = `${noteId}-${key}`;
+    clearTimeout(updateNoteKeyDebounceTimeouts[debounceKey]);
+    updateNoteKeyDebounceTimeouts[debounceKey] = setTimeout(() => {
+      pb.collection("notes").update(noteId, { [key]: value });
+    }, 300);
+  }
 };
 
 export const createNote = ({ x, y }: { x: number; y: number }) => {
@@ -41,20 +44,29 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
     text: "",
     y,
     x,
-    z: new Date().getTime(),
+    z: 0,
     user: pb.authStore.model!.id,
   };
 
   notes.set([...notes.get(), note]);
+  makeNoteHaveHighestZ(tempId);
 
   pb.collection("notes")
     .create({ ...note, id: null })
     .then((result) => {
-      updateNoteKey(tempId, "id", result.id);
+      updateNoteKey(tempId, "id", result.id, { persist: false });
     });
 };
 
 export const deleteNote = (noteId: string) => {
   notes.set(notes.get().filter((note) => note.id !== noteId));
   pb.collection("notes").delete(noteId);
+};
+
+export const makeNoteHaveHighestZ = (noteId: string) => {
+  const sortedNotes = notes.get().sort((a, b) => a.z - b.z);
+  for (let i = 0; i < sortedNotes.length; i++) {
+    updateNoteKey(sortedNotes[i].id, "z", i);
+  }
+  updateNoteKey(noteId, "z", sortedNotes.length);
 };

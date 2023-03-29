@@ -3,7 +3,12 @@ import classNames from "classnames";
 import { X } from "phosphor-react";
 import Auth from "./Auth";
 import LogOut from "./LogOut";
-import { createNote, deleteNote, updateNoteKey } from "../stores/notes";
+import {
+  createNote,
+  deleteNote,
+  updateNoteKey,
+  makeNoteHaveHighestZ,
+} from "../stores/notes";
 import useNotes from "../hooks/useNotes";
 
 export default function () {
@@ -33,7 +38,12 @@ export default function () {
           <div
             key={note.id}
             className="absolute"
-            style={{ left: note.x, top: note.y, zIndex: note.z }}
+            style={{
+              left: note.x,
+              top: note.y,
+              zIndex: note.z,
+            }}
+            onMouseDown={() => makeNoteHaveHighestZ(note.id)}
           >
             <textarea
               className={classNames(
@@ -48,7 +58,7 @@ export default function () {
             ></textarea>
             <button
               className="absolute top-1.5 right-1.5 p-1"
-              onClick={() => {
+              onMouseDown={() => {
                 if (confirm("Delete note?")) {
                   deleteNote(note.id);
                 }
