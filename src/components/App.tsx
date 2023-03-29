@@ -11,6 +11,8 @@ export default function () {
   const notes = useStore(notesStore);
   const container = useRef(null);
 
+  const lastContainerClick = useRef(0);
+
   return (
     <div>
       <Auth />
@@ -21,6 +23,10 @@ export default function () {
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
+          const now = new Date().getTime();
+          const difference = now - lastContainerClick.current;
+          lastContainerClick.current = now;
+          if (difference > 300) return;
           createNote({ x: event.pageX, y: event.pageY });
         }}
       >
