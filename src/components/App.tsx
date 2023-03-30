@@ -48,6 +48,9 @@ function Note({ note }: { note: Note }) {
     <div
       className="absolute"
       style={{ left: note.x, top: note.y, zIndex: note.z }}
+      onMouseDown={() => {
+        makeNoteHaveHighestZ(note.id);
+      }}
     >
       <textarea
         className={classNames(
