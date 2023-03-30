@@ -54,6 +54,8 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
     y,
     x,
     z: 0,
+    width: 250,
+    height: 250,
     user: pb.authStore.model!.id,
   };
 
