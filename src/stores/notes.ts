@@ -7,7 +7,17 @@ const pb = new PocketBase("https://pb-stickies.elk.sh");
 const notes = atom<Note[]>([]);
 export default notes;
 
-const updateNoteKeyDebounceTimeouts: Record<string, number> = {};
+const dirtyNoteIds: Set<string> = new Set();
+
+setInterval(() => {
+  for (const id of dirtyNoteIds) {
+    pb.collection("notes").update(
+      id,
+      notes.get().find((note) => note.id === id)!
+    );
+    dirtyNoteIds.delete(id);
+  }
+}, 500);
 
 type UpdateNoteKeyOptions = {
   persist?: boolean;
@@ -31,11 +41,7 @@ export const updateNoteKey = (
   );
 
   if (options?.persist ?? true) {
-    const debounceKey = `${noteId}-${key}`;
-    clearTimeout(updateNoteKeyDebounceTimeouts[debounceKey]);
-    updateNoteKeyDebounceTimeouts[debounceKey] = setTimeout(() => {
-      pb.collection("notes").update(noteId, { [key]: value });
-    }, 300);
+    dirtyNoteIds.add(noteId);
   }
 };
 
