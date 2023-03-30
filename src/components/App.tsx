@@ -43,8 +43,6 @@ export default function () {
   );
 }
 function Note({ note }: { note: Note }) {
-  const mouseDown = useRef(false);
-
   return (
     <div
       data-note-id={note.id}
@@ -56,21 +54,13 @@ function Note({ note }: { note: Note }) {
       }}
       onMouseDown={() => {
         makeNoteHaveHighestZ(note.id);
-        mouseDown.current = true;
       }}
-      onMouseUp={() => {
-        mouseDown.current = false;
-      }}
-      onMouseMove={(event) => {
-        if (!mouseDown.current) return;
-        updateNoteKey(note.id, "x", event.pageX, { persist: false });
-        updateNoteKey(note.id, "y", event.pageY, { persist: false });
-      }}
+      draggable
     >
       <textarea
         className={classNames(
-          "bg-yellow-100 h-72 w-72 shadow-sm outline outline-yellow-200 resize-none",
-          "focus:outline-2 focus:outline-yellow-300 focus:outline-offset-0 border-none focus:ring-0",
+          "bg-yellow-100 h-72 w-72 shadow-sm border-2 border-yellow-200 resize-none",
+          "focus:outline-none focus:ring-0 focus:border-yellow-300 transition-colors",
           "text-yellow-950 p-3"
         )}
         value={note.text}
