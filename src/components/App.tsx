@@ -1,8 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import classNames from "classnames";
 import { X } from "phosphor-react";
 import Auth from "./Auth";
-import LogOut from "./LogOut";
 import {
   createNote,
   deleteNote,
@@ -21,7 +20,6 @@ export default function () {
   return (
     <div>
       <Auth />
-      <LogOut />
 
       <div
         className="h-screen relative overflow-hidden"
