@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import classNames from "classnames";
-import { X } from "phosphor-react";
+import { ArrowsOutCardinal, X } from "phosphor-react";
 import Auth from "./Auth";
 import {
   createNote,
@@ -41,51 +41,14 @@ export default function () {
   );
 }
 function Note({ note }: { note: Note }) {
-  const mouseDown = useRef(false);
-  const deadzone = useRef<HTMLDivElement>(null);
+  const x = useRef(note.x);
+  const y = useRef(note.y);
 
   return (
     <div
-      data-note-id={note.id}
       className="absolute"
-      style={{
-        left: note.x,
-        top: note.y,
-        zIndex: note.z,
-      }}
-      onMouseDown={(event) => {
-        makeNoteHaveHighestZ(note.id);
-
-        const deadzoneRect = deadzone.current?.getBoundingClientRect();
-        if (!deadzoneRect) return;
-        const deadzoneX = deadzoneRect.x + window.scrollX;
-        const deadzoneY = deadzoneRect.y + window.scrollY;
-        if (event.pageX > deadzoneX && event.pageY > deadzoneY) return;
-
-        mouseDown.current = true;
-      }}
-      onMouseUp={() => {
-        mouseDown.current = false;
-        updateNoteKey(note.id, "x", note.x);
-        updateNoteKey(note.id, "y", note.y);
-      }}
-      onMouseOut={() => {
-        mouseDown.current = false;
-      }}
-      onMouseMove={(event) => {
-        if (!mouseDown.current) return;
-        updateNoteKey(note.id, "x", note.x + event.movementX, {
-          persist: false,
-        });
-        updateNoteKey(note.id, "y", note.y + event.movementY, {
-          persist: false,
-        });
-      }}
+      style={{ left: note.x, top: note.y, zIndex: note.z }}
     >
-      <div
-        ref={deadzone}
-        className="absolute bottom-0 right-0 h-6 w-6 pointer-events-none"
-      />
       <textarea
         className={classNames(
           "bg-yellow-100 shadow-sm border-2 border-yellow-200 resize",
@@ -104,20 +67,41 @@ function Note({ note }: { note: Note }) {
           updateNoteKey(note.id, "height", target.offsetHeight);
         }}
       ></textarea>
-      <button
-        className="absolute top-1 right-1 p-1"
-        onMouseDown={() => {
-          if (confirm("Delete note?")) {
-            deleteNote(note.id);
-          }
-        }}
-      >
-        <X
-          weight="bold"
-          size={13}
-          className="text-yellow-300 hover:text-yellow-500 transition-colors"
-        />
-      </button>
+      <div className="absolute top-1 right-1 grid grid-rows-2 gap-y-0.5">
+        <button
+          className="p-1 text-yellow-300 hover:text-yellow-500 transition-colors"
+          onMouseDown={() => {
+            function onMouseMove(event: MouseEvent) {
+              x.current = x.current + event.movementX;
+              y.current = y.current + event.movementY;
+              updateNoteKey(note.id, "x", x.current, { persist: false });
+              updateNoteKey(note.id, "y", y.current, { persist: false });
+            }
+
+            function onMouseUp() {
+              document.removeEventListener("mousemove", onMouseMove);
+              document.removeEventListener("mouseup", onMouseUp);
+              updateNoteKey(note.id, "x", x.current);
+              updateNoteKey(note.id, "y", y.current);
+            }
+
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+          }}
+        >
+          <ArrowsOutCardinal weight="bold" size={13} />
+        </button>
+        <button
+          className="p-1 text-yellow-300 hover:text-yellow-500 transition-colors"
+          onMouseDown={() => {
+            if (confirm("Delete note?")) {
+              deleteNote(note.id);
+            }
+          }}
+        >
+          <X weight="bold" size={13} />
+        </button>
+      </div>
     </div>
   );
 }
