@@ -76,7 +76,7 @@ function Note({ note }: { note: Note }) {
         className={classNames(
           "bg-yellow-100 h-72 w-72 shadow-sm border-2 border-yellow-200 resize-none",
           "focus:outline-none focus:ring-0 focus:border-yellow-300 transition-colors",
-          "text-yellow-950 p-3"
+          "text-yellow-950 p-3 pr-6 text-sm font-medium leading-relaxed"
         )}
         value={note.text}
         onChange={(e) => {
@@ -84,7 +84,7 @@ function Note({ note }: { note: Note }) {
         }}
       ></textarea>
       <button
-        className="absolute top-1.5 right-1.5 p-1"
+        className="absolute top-1 right-1 p-1"
         onMouseDown={() => {
           if (confirm("Delete note?")) {
             deleteNote(note.id);
@@ -93,6 +93,7 @@ function Note({ note }: { note: Note }) {
       >
         <X
           weight="bold"
+          size={13}
           className="text-yellow-300 hover:text-yellow-500 transition-colors"
         />
       </button>
