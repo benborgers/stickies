@@ -91,7 +91,7 @@ function Note({ note }: { note: Note }) {
           "bg-yellow-100 shadow-sm border-2 border-yellow-200 resize",
           "min-h-[50px] min-w-[130px]",
           "focus:outline-none focus:ring-0 focus:border-yellow-300 transition-colors",
-          "text-yellow-950 p-3 pr-6 text-sm font-medium leading-relaxed"
+          "text-yellow-950 p-3 pr-6 text-sm font-medium"
         )}
         style={{ width: note.width, height: note.height }}
         value={note.text}
