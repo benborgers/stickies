@@ -96,11 +96,14 @@ export default function () {
                       makeNoteHaveHighestZ(result.id);
                     }}
                   >
-                    <p className="">
-                      {result.text.trim() === ""
-                        ? "Blank"
-                        : removeHtml(result.text)}
-                    </p>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          result.text.trim() === ""
+                            ? "Blank"
+                            : removeHtml(result.text),
+                      }}
+                    />
                   </button>
                 ))}
 
