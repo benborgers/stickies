@@ -11,6 +11,7 @@ export default function () {
   const notes = useStore(notesStore);
 
   useEffect(() => {
+    if (!user) return;
     pb.collection("notes")
       .getFullList({
         filter: "hidden = false",
