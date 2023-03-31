@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import tinykeys from "tinykeys";
 import { AnimatePresence, motion } from "framer-motion";
+import classNames from "classnames";
 import usePocketBase from "../hooks/usePocketBase";
 import type Note from "../types/note";
 import { makeNoteHaveHighestZ, updateNoteKey } from "../stores/notes";
@@ -15,6 +16,7 @@ export default function () {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Note[]>([]);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (open === true) {
@@ -26,14 +28,34 @@ export default function () {
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       "$mod+k": () => setOpen(true),
+      ArrowUp: () => {
+        if (current === 0) {
+          setCurrent(results.length - 1);
+        } else {
+          setCurrent(current - 1);
+        }
+      },
+      ArrowDown: () => {
+        if (current === results.length - 1) {
+          setCurrent(0);
+        } else {
+          setCurrent(current + 1);
+        }
+      },
+      Enter: () => {
+        if (results[current]) {
+          unhideNote(results[current]);
+        }
+      },
     });
 
     return unsubscribe;
-  }, []);
+  }, [results, current]);
 
   async function onInputChange(event?: React.ChangeEvent<HTMLInputElement>) {
     const value = event ? event.target.value : "";
     setQuery(value);
+    setCurrent(0);
 
     if (value.trim() === "") {
       return setResults(
@@ -51,6 +73,15 @@ export default function () {
         sort: "-updated",
       })
     );
+  }
+
+  function unhideNote(note: Note) {
+    setOpen(false);
+    notesStore.set([...notes, note]);
+    updateNoteKey(note.id, "hidden", false);
+    updateNoteKey(note.id, "x", 24);
+    updateNoteKey(note.id, "y", 24);
+    makeNoteHaveHighestZ(note.id);
   }
 
   return (
@@ -82,28 +113,33 @@ export default function () {
                 value={query}
                 onChange={onInputChange}
               />
-              <div className="max-h-80 overflow-scroll divide-y divide-gray-100">
-                {results.map((result) => (
+              <div className="group max-h-80 overflow-scroll divide-y divide-gray-100">
+                {results.map((result, index) => (
                   <button
                     key={result.id}
-                    className="p-4 block w-full text-left hover:bg-gray-100 transition-colors"
-                    onClick={() => {
-                      setOpen(false);
-                      notesStore.set([...notes, result]);
-                      updateNoteKey(result.id, "hidden", false);
-                      updateNoteKey(result.id, "x", 24);
-                      updateNoteKey(result.id, "y", 24);
-                      makeNoteHaveHighestZ(result.id);
-                    }}
+                    className={classNames(
+                      "block w-full text-left hover:bg-gray-100 transition-colors"
+                    )}
+                    onClick={() => unhideNote(result)}
                   >
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          result.text.trim() === ""
-                            ? "Blank"
-                            : removeHtml(result.text),
-                      }}
-                    />
+                    <div
+                      className={classNames("p-4", {
+                        "bg-gray-100 group-hover:bg-transparent":
+                          current === index,
+                      })}
+                    >
+                      {result.text.trim() === "" ? (
+                        <p className="text-sm font-medium text-gray-400">
+                          Blank note
+                        </p>
+                      ) : (
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: removeHtml(result.text),
+                          }}
+                        />
+                      )}
+                    </div>
                   </button>
                 ))}
 
