@@ -3,7 +3,7 @@
 }
 
 .tiptap h1 {
-  @apply font-bold;
+  @apply font-bold text-base -mb-1;
 }
 
 .tiptap code {
