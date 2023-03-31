@@ -39,6 +39,7 @@ export default function () {
       return setResults(
         await pb.collection("notes").getFullList({
           filter: "hidden = true",
+          sort: "-updated",
           limit: 10,
         })
       );
@@ -47,6 +48,7 @@ export default function () {
     setResults(
       await pb.collection("notes").getFullList({
         filter: `hidden = true && text ~ "${encodeURIComponent(value)}"`,
+        sort: "-updated",
       })
     );
   }
@@ -89,20 +91,25 @@ export default function () {
                       setOpen(false);
                       notesStore.set([...notes, result]);
                       updateNoteKey(result.id, "hidden", false);
-                      updateNoteKey(result.id, "x", notes.length * 16);
-                      updateNoteKey(result.id, "y", notes.length * 16);
+                      const coord = notesStore.get().length * 24;
+                      updateNoteKey(result.id, "x", coord);
+                      updateNoteKey(result.id, "y", coord);
                       makeNoteHaveHighestZ(result.id);
                     }}
                   >
                     <p className="">
-                      {result.text === "" ? "Blank" : removeHtml(result.text)}
+                      {result.text.trim() === ""
+                        ? "Blank"
+                        : removeHtml(result.text)}
                     </p>
                   </button>
                 ))}
 
                 {results.length === 0 && (
                   <p className="p-4 text-sm font-medium text-gray-400">
-                    No results found.
+                    {query.trim() === ""
+                      ? "No hidden notes."
+                      : "No results found."}
                   </p>
                 )}
               </div>

@@ -73,7 +73,7 @@ function Note({ note }: { note: Note }) {
         "absolute overflow-hidden",
         "shadow rounded-xl backdrop-blur-md",
         "[&::-webkit-resizer]:hidden",
-        "min-h-[55px] min-w-[130px]",
+        "min-h-[85px] min-w-[130px]",
         "text-gray-950 text-sm font-medium"
       )}
       style={{
