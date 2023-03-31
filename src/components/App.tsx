@@ -22,7 +22,7 @@ export default function () {
       <Auth />
 
       <div
-        className="h-screen relative overflow-hidden"
+        className="h-screen relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-300 to-orange-200"
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
@@ -59,10 +59,11 @@ function Note({ note }: { note: Note }) {
     >
       <textarea
         className={classNames(
-          "bg-yellow-100 shadow-sm border-2 border-yellow-200 resize",
-          "min-h-[50px] min-w-[130px]",
-          "focus:outline-none focus:ring-0 focus:border-yellow-300 transition-colors",
-          "text-yellow-950 p-3 pr-6 text-sm font-medium"
+          "bg-white/70 shadow border-2 border-white rounded-xl backdrop-blur-md resize",
+          "[&::-webkit-resizer]:hidden",
+          "min-h-[55px] min-w-[130px]",
+          "focus:outline-none focus:ring-0 focus:border-white focus:bg-white/80 transition-colors",
+          "text-gray-950 p-3 pr-6 text-sm font-medium"
         )}
         style={{ width: note.width, height: note.height }}
         value={note.text}
@@ -77,7 +78,7 @@ function Note({ note }: { note: Note }) {
       ></textarea>
       <div className="absolute top-1 right-1 grid grid-rows-2 gap-y-0.5">
         <button
-          className="p-1 text-yellow-300 hover:text-yellow-500 transition-colors"
+          className="p-1 text-gray-900/10 hover:text-gray-900/30 transition-colors"
           onMouseDown={() => {
             function onMouseMove(event: MouseEvent) {
               x.current = x.current + event.movementX;
@@ -100,7 +101,7 @@ function Note({ note }: { note: Note }) {
           <ArrowsOutCardinal weight="bold" size={13} />
         </button>
         <button
-          className="p-1 text-yellow-300 hover:text-yellow-500 transition-colors"
+          className="p-1 text-gray-900/10 hover:text-gray-900/30 transition-colors"
           onMouseDown={() => {
             if (confirm("Delete note?")) {
               deleteNote(note.id);
