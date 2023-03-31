@@ -50,10 +50,6 @@ export default function () {
 
     refreshUser();
     setLoading(false);
-
-    setEmail("");
-    setPassword("");
-    setPasswordConfirmation("");
   }
 
   return (
@@ -63,9 +59,9 @@ export default function () {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/30 grid place-items-center z-50"
+          className="fixed inset-0 bg-white/20 grid place-items-center z-50"
         >
-          <div className="w-full max-w-md rounded-2xl shadow bg-white p-5">
+          <div className="w-full max-w-md rounded-2xl shadow bg-white/80 backdrop-blur-md p-5">
             <div className="grid grid-cols-2 gap-x-2">
               {Modes.map((mode) => (
                 <button
@@ -73,9 +69,8 @@ export default function () {
                   className={classNames(
                     "block relative py-1.5 font-medium transition-colors rounded-lg text-sm",
                     {
-                      "bg-gradient-to-b from-yellow-400 to-yellow-500 text-yellow-950":
-                        currentMode === mode,
-                      "bg-gray-100 text-gray-500": currentMode !== mode,
+                      "bg-gray-950/80 text-white": currentMode === mode,
+                      "bg-gray-950/10 text-gray-600": currentMode !== mode,
                     }
                   )}
                   onClick={() => setCurrentMode(mode)}
@@ -111,7 +106,7 @@ export default function () {
                 />
               )}
               <div className="flex justify-end pt-2">
-                <button className="block relative px-4 py-1.5 bg-gradient-to-b from-yellow-400 to-yellow-500 rounded-lg text-sm font-medium text-yellow-950">
+                <button className="block relative px-4 py-1.5 bg-gray-950/80 text-white rounded-lg text-sm font-medium">
                   <span
                     className={classNames("relative transition-opacity", {
                       "opacity-0": loading,
