@@ -12,7 +12,16 @@ export default function ({
   setValue: (value: string) => void;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit, TaskList, TaskItem],
+    extensions: [
+      StarterKit.configure({
+        horizontalRule: false,
+        heading: {
+          levels: [1],
+        },
+      }),
+      TaskList,
+      TaskItem,
+    ],
     content: value,
     onUpdate: ({ editor }) => {
       setValue(editor.getHTML());
