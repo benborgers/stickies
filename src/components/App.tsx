@@ -11,6 +11,7 @@ import {
 import useNotes from "../hooks/useNotes";
 import type Note from "../types/note";
 import Tiptap from "./Tiptap";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function () {
   const notes = useNotes();
@@ -34,9 +35,19 @@ export default function () {
           createNote({ x: event.pageX, y: event.pageY });
         }}
       >
-        {notes.map((note) => (
-          <Note key={note.id} note={note} />
-        ))}
+        <AnimatePresence>
+          {notes.map((note) => (
+            <motion.div
+              key={note.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              className="origin-bottom"
+            >
+              <Note note={note} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
