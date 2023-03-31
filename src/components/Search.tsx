@@ -25,22 +25,32 @@ export default function () {
     }
   }, [open]);
 
+  function scrollToResult(index: number) {
+    (
+      document.querySelector(
+        `[data-result-index="${index}"]`
+      ) as HTMLButtonElement
+    ).scrollIntoView();
+  }
+
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       "$mod+k": () => setOpen(true),
       ArrowUp: () => {
-        if (current === 0) {
-          setCurrent(results.length - 1);
-        } else {
-          setCurrent(current - 1);
+        let nextVal = current - 1;
+        if (nextVal < 0) {
+          nextVal = results.length - 1;
         }
+        setCurrent(nextVal);
+        scrollToResult(nextVal);
       },
       ArrowDown: () => {
-        if (current === results.length - 1) {
-          setCurrent(0);
-        } else {
-          setCurrent(current + 1);
+        let nextVal = current + 1;
+        if (nextVal > results.length - 1) {
+          nextVal = 0;
         }
+        setCurrent(nextVal);
+        scrollToResult(nextVal);
       },
       Enter: () => {
         if (results[current]) {
@@ -117,29 +127,24 @@ export default function () {
                 {results.map((result, index) => (
                   <button
                     key={result.id}
+                    data-result-index={index}
                     className={classNames(
-                      "block w-full text-left hover:bg-gray-100 transition-colors"
+                      "block w-full p-4 text-left hover:bg-gray-100 transition-colors",
+                      { "bg-gray-100": current === index }
                     )}
                     onClick={() => unhideNote(result)}
                   >
-                    <div
-                      className={classNames("p-4", {
-                        "bg-gray-100 group-hover:bg-transparent":
-                          current === index,
-                      })}
-                    >
-                      {result.text.trim() === "" ? (
-                        <p className="text-sm font-medium text-gray-400">
-                          Blank note
-                        </p>
-                      ) : (
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: removeHtml(result.text),
-                          }}
-                        />
-                      )}
-                    </div>
+                    {result.text.trim() === "" ? (
+                      <p className="text-sm font-medium text-gray-400">
+                        Blank note
+                      </p>
+                    ) : (
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: removeHtml(result.text),
+                        }}
+                      />
+                    )}
                   </button>
                 ))}
 
