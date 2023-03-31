@@ -21,7 +21,7 @@ export default function ({
       attributes: {
         class: [
           "tiptap",
-          "p-3 pr-6 h-full",
+          "p-3 pr-8 h-full",
           "border-2 border-white rounded-xl",
           "focus:outline-none",
           "overflow-scroll",
