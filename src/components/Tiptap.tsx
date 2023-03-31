@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
+import { useEffect } from "react";
 
 export default function ({
   value,
@@ -29,6 +30,16 @@ export default function ({
       },
     },
   });
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    if (value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [value]);
 
   return <EditorContent editor={editor} className="h-full" />;
 }
