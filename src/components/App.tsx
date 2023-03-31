@@ -10,6 +10,7 @@ import {
 } from "../stores/notes";
 import useNotes from "../hooks/useNotes";
 import type Note from "../types/note";
+import Tiptap from "./Tiptap";
 
 export default function () {
   const notes = useNotes();
@@ -22,7 +23,7 @@ export default function () {
       <Auth />
 
       <div
-        className="h-screen relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-300 to-orange-200"
+        className="h-screen relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-400 to-cyan-300"
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
@@ -49,33 +50,38 @@ function Note({ note }: { note: Note }) {
     y.current = note.y;
   }, [note.x, note.y]);
 
+  const width = useRef(note.width);
+  const height = useRef(note.height);
+
+  useEffect(() => {
+    width.current = note.width;
+    height.current = note.height;
+  }, [note.width, note.height]);
+
   return (
     <div
-      className="absolute"
-      style={{ left: note.x, top: note.y, zIndex: note.z }}
+      className={classNames(
+        "absolute overflow-hidden",
+        "shadow rounded-xl backdrop-blur-md",
+        "[&::-webkit-resizer]:hidden",
+        "min-h-[55px] min-w-[130px]",
+        "text-gray-950 text-sm font-medium"
+      )}
+      style={{
+        left: note.x,
+        top: note.y,
+        zIndex: note.z,
+        height: width.current,
+        width: height.current,
+      }}
       onMouseDown={() => {
         makeNoteHaveHighestZ(note.id);
       }}
     >
-      <textarea
-        className={classNames(
-          "bg-white/70 shadow border-2 border-white rounded-xl backdrop-blur-md resize",
-          "[&::-webkit-resizer]:hidden",
-          "min-h-[55px] min-w-[130px]",
-          "focus:outline-none focus:ring-0 focus:border-white focus:bg-white/80 transition-colors",
-          "text-gray-950 p-3 pr-6 text-sm font-medium"
-        )}
-        style={{ width: note.width, height: note.height }}
+      <Tiptap
         value={note.text}
-        onChange={(e) => {
-          updateNoteKey(note.id, "text", e.target.value);
-        }}
-        onMouseUp={(event) => {
-          const target = event.target as HTMLTextAreaElement;
-          updateNoteKey(note.id, "width", target.offsetWidth);
-          updateNoteKey(note.id, "height", target.offsetHeight);
-        }}
-      ></textarea>
+        setValue={(value) => updateNoteKey(note.id, "text", value)}
+      />
       <div className="absolute top-1 right-1 grid grid-rows-2 gap-y-0.5">
         <button
           className="p-1 text-gray-900/10 hover:text-gray-900/30 transition-colors"
@@ -111,6 +117,29 @@ function Note({ note }: { note: Note }) {
           <X weight="bold" size={13} />
         </button>
       </div>
+      <button
+        className="cursor-se-resize h-5 w-5 absolute bottom-0 right-0"
+        onMouseDown={() => {
+          function onMouseMove(event: MouseEvent) {
+            width.current = width.current + event.movementY;
+            height.current = height.current + event.movementX;
+            updateNoteKey(note.id, "width", width.current, { persist: false });
+            updateNoteKey(note.id, "height", height.current, {
+              persist: false,
+            });
+          }
+
+          function onMouseUp() {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+            updateNoteKey(note.id, "width", width.current);
+            updateNoteKey(note.id, "height", height.current);
+          }
+
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        }}
+      />
     </div>
   );
 }
