@@ -14,6 +14,8 @@
     "@astrojs/tailwind": "^3.1.1",
     "@nanostores/react": "^0.4.1",
     "@tailwindcss/forms": "^0.5.3",
+    "@tiptap/extension-task-item": "^2.0.1",
+    "@tiptap/extension-task-list": "^2.0.1",
     "@tiptap/react": "^2.0.1",
     "@tiptap/starter-kit": "^2.0.1",
     "@types/react": "^18.0.31",

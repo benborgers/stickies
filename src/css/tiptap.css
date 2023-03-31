@@ -1,0 +1,47 @@
+.tiptap {
+  @apply space-y-2;
+}
+
+.tiptap h1 {
+  @apply font-bold;
+}
+
+.tiptap code {
+  @apply font-semibold;
+}
+
+.tiptap pre {
+  @apply bg-gray-950/5 rounded-lg px-2.5 py-1.5 -ml-1;
+}
+
+.tiptap pre code {
+}
+
+.tiptap ul {
+  @apply list-disc;
+}
+
+.tiptap ol {
+  @apply list-decimal;
+}
+
+.tiptap ul,
+ol {
+  @apply ml-6 space-y-1;
+}
+
+.tiptap [data-type="taskList"] {
+  @apply list-none ml-0;
+}
+
+.tiptap [data-type="taskList"] li {
+  @apply grid grid-cols-[max-content,1fr] items-start;
+}
+
+.tiptap [data-type="taskList"] li input {
+  @apply -translate-y-[0.12rem] mr-2.5 h-3.5 w-3.5 cursor-pointer focus:ring-0 focus:ring-offset-0 border-gray-950/20 rounded text-gray-800 checked:border-gray-800 transition-colors duration-75;
+}
+
+.tiptap [data-type="taskList"] li div {
+  @apply inline-block;
+}

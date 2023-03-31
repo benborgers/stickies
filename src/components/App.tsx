@@ -84,7 +84,7 @@ function Note({ note }: { note: Note }) {
       />
       <div className="absolute top-1 right-1 grid grid-rows-2 gap-y-0.5">
         <button
-          className="p-1 text-gray-900/10 hover:text-gray-900/30 transition-colors"
+          className="p-1 text-gray-950/10 hover:text-gray-950/30 transition-colors"
           onMouseDown={() => {
             function onMouseMove(event: MouseEvent) {
               x.current = x.current + event.movementX;
@@ -107,7 +107,7 @@ function Note({ note }: { note: Note }) {
           <ArrowsOutCardinal weight="bold" size={13} />
         </button>
         <button
-          className="p-1 text-gray-900/10 hover:text-gray-900/30 transition-colors"
+          className="p-1 text-gray-950/10 hover:text-gray-950/30 transition-colors"
           onMouseDown={() => {
             if (confirm("Delete note?")) {
               deleteNote(note.id);
