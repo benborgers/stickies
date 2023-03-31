@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import { ArrowsOutCardinal, X } from "phosphor-react";
 import Auth from "./Auth";
@@ -43,6 +43,11 @@ export default function () {
 function Note({ note }: { note: Note }) {
   const x = useRef(note.x);
   const y = useRef(note.y);
+
+  useEffect(() => {
+    x.current = note.x;
+    y.current = note.y;
+  }, [note.x, note.y]);
 
   return (
     <div
