@@ -89,6 +89,8 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
   pb.collection("notes")
     .create({ ...note, id: null })
     .then((result) => {
+      window.tiptap_editors[tempId].commands.focus();
+
       updateNoteKey(tempId, "id", result.id, { persist: false });
       makeNoteHaveHighestZ(result.id);
     });

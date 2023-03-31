@@ -88,6 +88,7 @@ function Note({ note }: { note: Note }) {
       }}
     >
       <Tiptap
+        id={note.id}
         value={note.text}
         setValue={(value) => updateNoteKey(note.id, "text", value)}
       />
