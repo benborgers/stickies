@@ -66,14 +66,14 @@ export default function () {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center p-4 bg-white/30 backdrop-blur-sm"
+            className="fixed inset-0 flex items-center justify-center p-4 bg-white/10 backdrop-blur-md"
           >
             <Dialog.Panel
               as={motion.div}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              className="w-full max-w-lg rounded-xl overflow-hidden bg-white shadow-lg text-gray-800"
+              className="w-full max-w-lg rounded-xl overflow-hidden bg-white shadow-lg text-gray-800 mb-80"
             >
               <input
                 type="text"

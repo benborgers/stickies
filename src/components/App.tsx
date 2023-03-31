@@ -26,7 +26,7 @@ export default function () {
       <Search />
 
       <div
-        className="h-screen relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-400 to-cyan-300"
+        className="h-screen relative overflow-hidden bg-gradient-to-b from-violet-200 via-violet-300 to-violet-300"
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
