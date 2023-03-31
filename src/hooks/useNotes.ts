@@ -21,5 +21,15 @@ export default function () {
       });
   }, [user]);
 
-  return notes.filter((n) => n.hidden === false);
+  const seenNoteIds: string[] = [];
+
+  return notes
+    .filter((n) => n.hidden === false)
+    .filter((n) => {
+      if (seenNoteIds.includes(n.id)) {
+        return false;
+      }
+      seenNoteIds.push(n.id);
+      return true;
+    });
 }

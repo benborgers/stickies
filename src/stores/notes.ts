@@ -30,7 +30,10 @@ pb.collection("notes").subscribe("*", (event) => {
           note.id === event.record.id &&
           !recentlyUpdatedNoteIds.has(note.id)
         ) {
-          return event.record as unknown as Note;
+          return {
+            ...note,
+            ...event.record,
+          };
         }
         return note;
       })
@@ -68,12 +71,13 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
   const tempId = new Date().getTime().toString();
 
   const note: Note = {
+    tempId,
     id: tempId,
     user: pb.authStore.model!.id,
     text: "",
     y,
     x,
-    z: 0,
+    z: 999,
     width: 250,
     height: 250,
     hidden: false,

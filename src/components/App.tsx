@@ -12,6 +12,7 @@ import useNotes from "../hooks/useNotes";
 import type Note from "../types/note";
 import Tiptap from "./Tiptap";
 import { AnimatePresence, motion } from "framer-motion";
+import Search from "./Search";
 
 export default function () {
   const notes = useNotes();
@@ -22,6 +23,7 @@ export default function () {
   return (
     <div>
       <Auth />
+      <Search />
 
       <div
         className="h-screen relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-400 to-cyan-300"
@@ -37,15 +39,7 @@ export default function () {
       >
         <AnimatePresence>
           {notes.map((note) => (
-            <motion.div
-              key={note.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 16 }}
-              className="origin-bottom"
-            >
-              <Note note={note} />
-            </motion.div>
+            <Note key={note.tempId ?? note.id} note={note} />
           ))}
         </AnimatePresence>
       </div>
@@ -70,7 +64,11 @@ function Note({ note }: { note: Note }) {
   }, [note.width, note.height]);
 
   return (
-    <div
+    <motion.div
+      key={note.tempId ?? note.id}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
       className={classNames(
         "absolute overflow-hidden",
         "shadow rounded-xl backdrop-blur-md",
@@ -129,7 +127,9 @@ function Note({ note }: { note: Note }) {
           className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
           onMouseDown={() => {
             if (confirm("Delete note?")) {
-              deleteNote(note.id);
+              requestAnimationFrame(() => {
+                deleteNote(note.id);
+              });
             }
           }}
         >
@@ -142,7 +142,9 @@ function Note({ note }: { note: Note }) {
           function onMouseMove(event: MouseEvent) {
             width.current = width.current + event.movementY;
             height.current = height.current + event.movementX;
-            updateNoteKey(note.id, "width", width.current, { persist: false });
+            updateNoteKey(note.id, "width", width.current, {
+              persist: false,
+            });
             updateNoteKey(note.id, "height", height.current, {
               persist: false,
             });
@@ -159,6 +161,6 @@ function Note({ note }: { note: Note }) {
           document.addEventListener("mouseup", onMouseUp);
         }}
       />
-    </div>
+    </motion.div>
   );
 }

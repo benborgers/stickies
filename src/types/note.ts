@@ -1,4 +1,6 @@
 type Note = {
+  tempId?: string;
+
   id: string;
   user: string;
   text: string;
