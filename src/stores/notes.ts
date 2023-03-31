@@ -8,16 +8,35 @@ const notes = atom<Note[]>([]);
 export default notes;
 
 const dirtyNoteIds: Set<string> = new Set();
+const recentlyUpdatedNoteIds: Set<string> = new Set();
 
 setInterval(() => {
+  recentlyUpdatedNoteIds.clear();
   for (const id of dirtyNoteIds) {
     pb.collection("notes").update(
       id,
       notes.get().find((note) => note.id === id)!
     );
     dirtyNoteIds.delete(id);
+    recentlyUpdatedNoteIds.add(id);
   }
 }, 500);
+
+pb.collection("notes").subscribe("*", (event) => {
+  if (event.action === "update") {
+    notes.set(
+      notes.get().map((note) => {
+        if (
+          note.id === event.record.id &&
+          !recentlyUpdatedNoteIds.has(note.id)
+        ) {
+          return event.record as unknown as Note;
+        }
+        return note;
+      })
+    );
+  }
+});
 
 type UpdateNoteKeyOptions = {
   persist?: boolean;
