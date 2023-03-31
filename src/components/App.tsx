@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import classNames from "classnames";
-import { ArrowsOutCardinal, X } from "phosphor-react";
+import { ArrowsOutCardinal, MinusCircle, XCircle } from "phosphor-react";
 import Auth from "./Auth";
 import {
   createNote,
@@ -82,9 +82,9 @@ function Note({ note }: { note: Note }) {
         value={note.text}
         setValue={(value) => updateNoteKey(note.id, "text", value)}
       />
-      <div className="absolute top-1 right-1 grid grid-rows-2 gap-y-0.5">
+      <div className="absolute top-1.5 right-1.5 grid grid-rows-3 justify-items-center">
         <button
-          className="p-1 text-gray-950/10 hover:text-gray-950/30 transition-colors"
+          className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
           onMouseDown={() => {
             function onMouseMove(event: MouseEvent) {
               x.current = x.current + event.movementX;
@@ -107,14 +107,22 @@ function Note({ note }: { note: Note }) {
           <ArrowsOutCardinal weight="bold" size={13} />
         </button>
         <button
-          className="p-1 text-gray-950/10 hover:text-gray-950/30 transition-colors"
+          className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
+          onMouseDown={() => {
+            updateNoteKey(note.id, "hidden", true);
+          }}
+        >
+          <MinusCircle weight="bold" size={15} />
+        </button>
+        <button
+          className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
           onMouseDown={() => {
             if (confirm("Delete note?")) {
               deleteNote(note.id);
             }
           }}
         >
-          <X weight="bold" size={13} />
+          <XCircle weight="bold" size={15} />
         </button>
       </div>
       <button

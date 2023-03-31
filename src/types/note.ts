@@ -1,12 +1,13 @@
 type Note = {
   id: string;
+  user: string;
   text: string;
   x: number;
   y: number;
   z: number;
   width: number;
   height: number;
-  user: string;
+  hidden: boolean;
 };
 
 export default Note;

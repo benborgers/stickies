@@ -69,13 +69,14 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
 
   const note: Note = {
     id: tempId,
+    user: pb.authStore.model!.id,
     text: "",
     y,
     x,
     z: 0,
     width: 250,
     height: 250,
-    user: pb.authStore.model!.id,
+    hidden: false,
   };
 
   notes.set([...notes.get(), note]);

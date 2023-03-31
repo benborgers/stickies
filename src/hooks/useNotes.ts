@@ -12,11 +12,13 @@ export default function () {
 
   useEffect(() => {
     pb.collection("notes")
-      .getFullList()
+      .getFullList({
+        filter: "hidden = false",
+      })
       .then((notes) => {
         notesStore.set(notes as unknown as Note[]);
       });
   }, [user]);
 
-  return notes;
+  return notes.filter((n) => n.hidden === false);
 }
