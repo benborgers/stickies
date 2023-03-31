@@ -91,9 +91,8 @@ export default function () {
                       setOpen(false);
                       notesStore.set([...notes, result]);
                       updateNoteKey(result.id, "hidden", false);
-                      const coord = notesStore.get().length * 24;
-                      updateNoteKey(result.id, "x", coord);
-                      updateNoteKey(result.id, "y", coord);
+                      updateNoteKey(result.id, "x", 24);
+                      updateNoteKey(result.id, "y", 24);
                       makeNoteHaveHighestZ(result.id);
                     }}
                   >
