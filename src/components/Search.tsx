@@ -187,8 +187,8 @@ function truncateResult(text: string, query: string) {
   if (query !== "" && !snippet.includes(query)) {
     const PREFIX = 30;
     snippet = text.slice(
-      text.indexOf(query) - PREFIX,
-      text.indexOf(query) + LENGTH
+      text.toLowerCase().indexOf(query.toLowerCase()) - PREFIX,
+      text.toLowerCase().indexOf(query.toLowerCase()) - PREFIX + LENGTH
     );
   }
 
