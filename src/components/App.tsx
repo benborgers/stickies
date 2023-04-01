@@ -32,7 +32,7 @@ export default function () {
       <div
         className={classNames(
           "h-screen relative overflow-hidden isolate bg-gradient-to-b",
-          user?.theme ?? "from-violet-200 via-violet-300 to-violet-300"
+          user?.theme || "from-violet-200 via-violet-300 to-violet-300"
         )}
         ref={container}
         onClick={(event) => {
