@@ -26,11 +26,17 @@ export default function () {
   }, [open]);
 
   function scrollToResult(index: number) {
-    (
-      document.querySelector(
-        `[data-result-index="${index}"]`
-      ) as HTMLButtonElement
-    ).scrollIntoView();
+    const result = document.querySelector(
+      `[data-result-index="${index}"]`
+    ) as HTMLButtonElement;
+
+    // @ts-ignore
+    if (result.scrollIntoViewIfNeeded) {
+      // @ts-ignore
+      return result.scrollIntoViewIfNeeded();
+    } else {
+      return result.scrollIntoView();
+    }
   }
 
   useEffect(() => {
