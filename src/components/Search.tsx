@@ -82,7 +82,7 @@ export default function () {
 
     setResults(
       await pb.collection("notes").getFullList({
-        filter: `hidden = true && text ~ "${encodeURIComponent(value)}"`,
+        filter: `hidden = true && text ~ "${value}"`,
         sort: "-updated",
       })
     );
@@ -143,8 +143,16 @@ export default function () {
                       </p>
                     ) : (
                       <p
+                        className="break-words"
                         dangerouslySetInnerHTML={{
-                          __html: removeHtml(result.text),
+                          __html: truncateResult(
+                            removeHtml(result.text),
+                            query
+                          ).replace(
+                            new RegExp(query.trim(), "gi"),
+                            (match) =>
+                              `<mark class="bg-amber-200">${match}</mark>`
+                          ),
                         }}
                       />
                     )}
@@ -169,4 +177,30 @@ export default function () {
 
 function removeHtml(html: string) {
   return html.replace(/<.+?>/gm, " ").replace(/\s+/gm, " ");
+}
+
+function truncateResult(text: string, query: string) {
+  const LENGTH = 150;
+
+  let snippet = text.slice(0, LENGTH);
+
+  if (query !== "" && !snippet.includes(query)) {
+    const PREFIX = 30;
+    snippet = text.slice(
+      text.indexOf(query) - PREFIX,
+      text.indexOf(query) + LENGTH
+    );
+  }
+
+  let final = snippet.trim();
+
+  if (!text.startsWith(snippet)) {
+    final = "..." + final;
+  }
+
+  if (!text.endsWith(snippet)) {
+    final = final + "...";
+  }
+
+  return final;
 }
