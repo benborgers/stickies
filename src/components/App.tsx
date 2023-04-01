@@ -44,6 +44,14 @@ export default function () {
           createNote({ x: event.pageX, y: event.pageY });
         }}
       >
+        <div
+          style={{
+            backgroundImage:
+              'url("https://framerusercontent.com/images/rR6HYXBrMmX4cRpXfXUOvpvpB0.png")',
+            backgroundSize: 100,
+          }}
+          className="fixed inset-0 opacity-5 pointer-events-none"
+        />
         <AnimatePresence>
           {notes.map((note) => (
             <Note key={note.tempId ?? note.id} note={note} />
