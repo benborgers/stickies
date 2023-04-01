@@ -13,8 +13,11 @@ import type Note from "../types/note";
 import Tiptap from "./Tiptap";
 import { AnimatePresence, motion } from "framer-motion";
 import Search from "./Search";
+import ThemePicker from "./ThemePicker";
+import useUser from "../hooks/useUser";
 
 export default function () {
+  const { user } = useUser();
   const notes = useNotes();
   const container = useRef(null);
 
@@ -24,9 +27,13 @@ export default function () {
     <div>
       <Auth />
       <Search />
+      <ThemePicker />
 
       <div
-        className="h-screen relative overflow-hidden bg-gradient-to-b from-violet-200 via-violet-300 to-violet-300"
+        className={classNames(
+          "h-screen relative overflow-hidden isolate bg-gradient-to-b",
+          user?.theme ?? "from-violet-200 via-violet-300 to-violet-300"
+        )}
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;

@@ -10,5 +10,15 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    {
+      pattern:
+        /bg-(red|orange|amber|emerald|teal|sky|blue|indigo|violet|purple|fuchsia|rose)-300/,
+    },
+    {
+      pattern:
+        /(from|via|to)-(red|orange|amber|emerald|teal|sky|blue|indigo|violet|purple|fuchsia|rose)-(200|300)/,
+    },
+  ],
   plugins: [require("@tailwindcss/forms")],
 };
