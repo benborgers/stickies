@@ -7,15 +7,18 @@ const pb = new PocketBase("https://pb-stickies.elk.sh");
 const notes = atom<Note[]>([]);
 export default notes;
 
-onMount(notes, () => {
+export function loadNotes() {
   pb.collection("notes")
     .getFullList({
       filter: "hidden = false",
     })
     .then((result) => {
+      console.log(result);
       notes.set(result as unknown as Note[]);
     });
-});
+}
+
+onMount(notes, loadNotes);
 
 const dirtyNoteIds: Set<string> = new Set();
 const recentlyUpdatedNoteIds: Set<string> = new Set();

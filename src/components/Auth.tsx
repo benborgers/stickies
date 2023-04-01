@@ -6,6 +6,7 @@ import Input from "./Input";
 import usePocketBase from "../hooks/usePocketBase";
 import catchPocketBase from "../util/catchPocketBase";
 import useUser from "../hooks/useUser";
+import { loadNotes } from "../stores/notes";
 
 type Mode = "login" | "signup";
 const Modes: Mode[] = ["login", "signup"];
@@ -49,6 +50,7 @@ export default function () {
     }
 
     refreshUser();
+    loadNotes();
     setLoading(false);
   }
 
