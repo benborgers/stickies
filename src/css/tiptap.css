@@ -30,6 +30,14 @@ ol {
   @apply ml-6 space-y-1;
 }
 
+/* Add a bit of spacing above nested lists. */
+.tiptap ul ol,
+.tiptap ol ul,
+.tiptap ol ul,
+.tiptap ul ul {
+  @apply mt-1;
+}
+
 .tiptap [data-type="taskList"] {
   @apply list-none ml-0;
 }
