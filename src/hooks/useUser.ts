@@ -9,11 +9,11 @@ export default function () {
   const user = useStore(userStore);
 
   useEffect(() => {
-    userStore.set(pb.authStore.model as User);
+    userStore.set(pb.authStore.model as unknown as User);
   }, []);
 
   function refreshUser() {
-    userStore.set(pb.authStore.model as User);
+    userStore.set(pb.authStore.model as unknown as User);
   }
 
   return { user, refreshUser };

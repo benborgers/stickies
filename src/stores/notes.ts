@@ -1,4 +1,4 @@
-import { atom } from "nanostores";
+import { atom, onMount } from "nanostores";
 import type Note from "../types/note";
 
 import PocketBase from "pocketbase";
@@ -6,6 +6,16 @@ const pb = new PocketBase("https://pb-stickies.elk.sh");
 
 const notes = atom<Note[]>([]);
 export default notes;
+
+onMount(notes, () => {
+  pb.collection("notes")
+    .getFullList({
+      filter: "hidden = false",
+    })
+    .then((result) => {
+      notes.set(result as unknown as Note[]);
+    });
+});
 
 const dirtyNoteIds: Set<string> = new Set();
 const recentlyUpdatedNoteIds: Set<string> = new Set();
