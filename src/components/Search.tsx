@@ -117,7 +117,7 @@ export default function () {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              className="w-full max-w-lg rounded-xl overflow-hidden bg-white shadow-lg text-gray-800 mb-80"
+              className="w-full max-w-lg rounded-xl overflow-hidden bg-white shadow-lg text-gray-800 mb-32"
             >
               <input
                 type="text"
