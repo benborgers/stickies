@@ -103,6 +103,8 @@ export default function () {
     makeNoteHaveHighestZ(note.id);
   }
 
+  const emptyQuery = query.trim() === "";
+
   return (
     <AnimatePresence>
       {open && (
@@ -143,7 +145,7 @@ export default function () {
                     )}
                     onClick={() => unhideNote(result)}
                   >
-                    {result.text.trim() === "" ? (
+                    {removeHtml(result.text).trim() === "" ? (
                       <p className="text-sm font-medium text-gray-400">
                         Blank note
                       </p>
@@ -151,14 +153,22 @@ export default function () {
                       <p
                         className="break-words"
                         dangerouslySetInnerHTML={{
-                          __html: truncateResult(
-                            removeHtml(result.text),
-                            query
-                          ).replace(
-                            new RegExp(query.trim(), "gi"),
-                            (match) =>
-                              `<mark class="bg-amber-200">${match}</mark>`
-                          ),
+                          __html: (() => {
+                            const truncated = truncateResult(
+                              removeHtml(result.text),
+                              query
+                            );
+
+                            if (emptyQuery) {
+                              return truncated;
+                            }
+
+                            return truncated.replace(
+                              new RegExp(query.trim(), "gi"),
+                              (match) =>
+                                `<mark class="bg-amber-200">${match}</mark>`
+                            );
+                          })(),
                         }}
                       />
                     )}
@@ -167,9 +177,7 @@ export default function () {
 
                 {results.length === 0 && (
                   <p className="p-4 text-sm font-medium text-gray-400">
-                    {query.trim() === ""
-                      ? "No hidden notes."
-                      : "No results found."}
+                    {emptyQuery ? "No hidden notes." : "No results found."}
                   </p>
                 )}
               </div>
