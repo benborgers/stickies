@@ -69,9 +69,9 @@ export default function () {
       <AnimatePresence initial={false}>
         {!open && (
           <motion.button
-            initial={{ opacity: 0, y: "-2rem" }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: "-2rem" }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             className="fixed bottom-4 right-4 h-7 w-7 bg-white/60 border border-white z-10 flex items-center justify-center rounded-full shadow"
             whileTap={{ scale: 0.93 }}
             onClick={() => setOpen(true)}
