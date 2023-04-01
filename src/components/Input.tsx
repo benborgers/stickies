@@ -10,7 +10,7 @@ export default function ({
       </label>
       <input
         id={id}
-        className="mt-0.5 rounded-lg w-full border-gray-300 bg-gray-50 transition-colors focus:border-gray-800 focus:ring-gray-800"
+        className="mt-0.5 rounded-lg w-full border-gray-300 bg-gray-50 transition-colors focus:border-gray-950/70 focus:ring-gray-950/70"
         {...props}
       />
     </div>
