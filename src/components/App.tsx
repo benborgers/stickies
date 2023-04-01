@@ -32,9 +32,19 @@ export default function () {
 
       <div
         className={classNames(
-          "h-screen relative overflow-hidden isolate bg-gradient-to-b",
+          "min-h-screen min-w-[100vw] relative overflow-hidden isolate bg-gradient-to-b",
           user?.theme || "from-violet-200 via-violet-300 to-violet-300"
         )}
+        style={{
+          height:
+            notes.length > 0
+              ? Math.max(...notes.map((note) => note.y + note.height)) + 24
+              : 0,
+          width:
+            notes.length > 0
+              ? Math.max(...notes.map((note) => note.x + note.width)) + 24
+              : 0,
+        }}
         ref={container}
         onClick={(event) => {
           if (event.target !== container.current) return;
