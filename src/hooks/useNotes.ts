@@ -7,7 +7,7 @@ export default function () {
   const seenNoteIds: string[] = [];
 
   return notes
-    .filter((n) => n.hidden === false)
+    .filter((n) => n.hidden_at === "")
     .filter((n) => {
       if (seenNoteIds.includes(n.id)) {
         return false;

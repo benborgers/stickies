@@ -141,7 +141,7 @@ function Note({ note }: { note: Note }) {
         <button
           className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
           onMouseDown={() => {
-            updateNoteKey(note.id, "hidden", true);
+            updateNoteKey(note.id, "hidden_at", new Date());
           }}
         >
           <MinusCircle weight="bold" size={15} />

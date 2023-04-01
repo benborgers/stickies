@@ -9,7 +9,7 @@ type Note = {
   z: number;
   width: number;
   height: number;
-  hidden: boolean;
+  hidden_at: Date | "";
 };
 
 export default Note;

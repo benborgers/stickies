@@ -2,11 +2,7 @@ import { atom, onMount } from "nanostores";
 import type Note from "../types/note";
 
 import PocketBase from "pocketbase";
-import {
-  POCKETBASE_ENDPOINT,
-  DEFAULT,
-  DEFAULT_NOTE_WIDTH,
-} from "../util/constants";
+import { POCKETBASE_ENDPOINT, DEFAULT_NOTE_WIDTH } from "../util/constants";
 const pb = new PocketBase(POCKETBASE_ENDPOINT);
 
 const notes = atom<Note[]>([]);
@@ -15,7 +11,7 @@ export default notes;
 export function loadNotes() {
   pb.collection("notes")
     .getFullList({
-      filter: "hidden = false",
+      filter: "hidden_at = null",
     })
     .then((result) => {
       notes.set(result as unknown as Note[]);
@@ -97,7 +93,7 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
     z: 999,
     width: DEFAULT_NOTE_WIDTH,
     height: DEFAULT_NOTE_WIDTH,
-    hidden: false,
+    hidden_at: "",
   };
 
   notes.set([...notes.get(), note]);

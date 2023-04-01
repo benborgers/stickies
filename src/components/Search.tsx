@@ -79,8 +79,8 @@ export default function () {
     if (value.trim() === "") {
       return setResults(
         await pb.collection("notes").getFullList({
-          filter: "hidden = true",
-          sort: "-updated",
+          filter: "hidden_at != null",
+          sort: "-hidden_at",
           limit: 10,
         })
       );
@@ -88,7 +88,7 @@ export default function () {
 
     setResults(
       await pb.collection("notes").getFullList({
-        filter: `hidden = true && text ~ "${value}"`,
+        filter: `hidden_at != null && text ~ "${value}"`,
         sort: "-updated",
       })
     );
@@ -97,7 +97,7 @@ export default function () {
   function unhideNote(note: Note) {
     setOpen(false);
     notesStore.set([...notes, note]);
-    updateNoteKey(note.id, "hidden", false);
+    updateNoteKey(note.id, "hidden_at", "");
     updateNoteKey(note.id, "x", 24);
     updateNoteKey(note.id, "y", 24);
     makeNoteHaveHighestZ(note.id);
