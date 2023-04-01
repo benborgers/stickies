@@ -62,13 +62,18 @@ export default function () {
 
   return (
     <>
-      <motion.button
-        className="fixed bottom-4 right-4 h-7 w-7 bg-white/60 border border-white z-10 flex items-center justify-center rounded-full shadow"
-        whileTap={{ scale: 0.93 }}
-        onClick={() => setOpen(true)}
-      >
-        <Swatches weight="fill" size={18} className="text-gray-950/80" />
-      </motion.button>
+      {!open && (
+        <motion.button
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          className="fixed bottom-4 right-4 h-7 w-7 bg-white/60 border border-white z-10 flex items-center justify-center rounded-full shadow"
+          whileTap={{ scale: 0.93 }}
+          onClick={() => setOpen(true)}
+        >
+          <Swatches weight="fill" size={18} className="text-gray-950/80" />
+        </motion.button>
+      )}
 
       <AnimatePresence>
         {open && (
@@ -78,7 +83,13 @@ export default function () {
             onClose={() => setOpen(false)}
             className="relative z-50"
           >
-            <Dialog.Panel className="fixed bottom-14 right-4 bg-white/60 border border-white px-3 py-2 rounded-xl shadow">
+            <Dialog.Panel
+              as={motion.div}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              className="fixed bottom-4 right-4 bg-white/60 border border-white px-3 py-2 rounded-xl shadow"
+            >
               <p className="text-gray-950/50 text-sm font-medium">
                 Generate a theme based on...
               </p>
