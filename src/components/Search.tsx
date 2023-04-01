@@ -37,6 +37,7 @@ export default function () {
     const unsubscribe = tinykeys(window, {
       "$mod+k": () => setOpen(true),
       ArrowUp: () => {
+        if (!open) return;
         let nextVal = current - 1;
         if (nextVal < 0) {
           nextVal = results.length - 1;
@@ -45,6 +46,7 @@ export default function () {
         scrollToResult(nextVal);
       },
       ArrowDown: () => {
+        if (!open) return;
         let nextVal = current + 1;
         if (nextVal > results.length - 1) {
           nextVal = 0;
@@ -53,6 +55,7 @@ export default function () {
         scrollToResult(nextVal);
       },
       Enter: () => {
+        if (!open) return;
         if (results[current]) {
           unhideNote(results[current]);
         }
@@ -60,7 +63,7 @@ export default function () {
     });
 
     return unsubscribe;
-  }, [results, current]);
+  }, [results, current, open]);
 
   async function onInputChange(event?: React.ChangeEvent<HTMLInputElement>) {
     const value = event ? event.target.value : "";
