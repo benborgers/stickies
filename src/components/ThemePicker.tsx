@@ -4,6 +4,7 @@ import { Swatches } from "phosphor-react";
 import { Dialog } from "@headlessui/react";
 import classNames from "classnames";
 import userStore from "../stores/user";
+import usePocketBase from "../hooks/usePocketBase";
 
 const COLORS = [
   "red",
@@ -25,6 +26,7 @@ function randomElement(array: any[]) {
 }
 
 export default function () {
+  const pb = usePocketBase();
   const [open, setOpen] = useState(false);
 
   function generateTheme(color: (typeof COLORS)[number]) {
@@ -33,6 +35,7 @@ export default function () {
     const adjacentColors = [
       COLORS.at(colorIndex - 2),
       COLORS.at(colorIndex - 1),
+      COLORS.at(colorIndex),
       COLORS.at((colorIndex + 1) % COLORS.length),
       COLORS.at((colorIndex + 2) % COLORS.length),
     ];
@@ -58,6 +61,7 @@ export default function () {
       .join(" ");
 
     userStore.set({ ...userStore.get()!, theme: classes });
+    pb.collection("users").update(userStore.get()!.id, { theme: classes });
   }
 
   return (
