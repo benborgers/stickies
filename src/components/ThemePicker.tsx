@@ -31,17 +31,33 @@ export default function () {
     const possibleLevels = [200, 300];
     const colorIndex = COLORS.indexOf(color);
     const adjacentColors = [
+      COLORS.at(colorIndex - 2),
       COLORS.at(colorIndex - 1),
       COLORS.at((colorIndex + 1) % COLORS.length),
+      COLORS.at((colorIndex + 2) % COLORS.length),
     ];
 
-    const classes = [
-      `from-${randomElement(adjacentColors)}-${randomElement(possibleLevels)}`,
-      `via-${color}-${randomElement(possibleLevels)}`,
-      `to-${color}-${randomElement(possibleLevels)}`,
+    const stops: { color: string; level: number }[] = [
+      {
+        color: randomElement(adjacentColors),
+        level: randomElement(possibleLevels),
+      },
+      { color, level: randomElement(possibleLevels) },
+      { color, level: randomElement(possibleLevels) },
     ];
 
-    userStore.set({ ...userStore.get()!, theme: classes.join(" ") });
+    if (stops[1].level < stops[2].level) {
+      stops[1].level = stops[2].level;
+    }
+
+    const classes = stops
+      .map(
+        (stop, index) =>
+          `${["from", "via", "to"][index]}-${stop.color}-${stop.level}`
+      )
+      .join(" ");
+
+    userStore.set({ ...userStore.get()!, theme: classes });
   }
 
   return (
@@ -74,7 +90,8 @@ export default function () {
                     whileTap={{ scale: 0.95 }}
                     className={classNames(
                       `bg-${color}-300`,
-                      "h-6 w-6 rounded-full focus:outline-none"
+                      "h-6 w-6 rounded-full focus:outline-none",
+                      "border-2 border-white"
                     )}
                     onClick={() => generateTheme(color)}
                   />
