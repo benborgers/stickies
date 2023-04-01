@@ -1,4 +1,5 @@
 import PocketBase from "pocketbase";
+import { POCKETBASE_ENDPOINT } from "../util/constants";
 
 declare global {
   interface Window {
@@ -7,7 +8,7 @@ declare global {
 }
 
 export default function () {
-  const client = new PocketBase("https://pb-stickies.elk.sh");
+  const client = new PocketBase(POCKETBASE_ENDPOINT);
   window.pb = client;
   return client;
 }

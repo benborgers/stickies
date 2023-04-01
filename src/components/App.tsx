@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Search from "./Search";
 import ThemePicker from "./ThemePicker";
 import useUser from "../hooks/useUser";
+import { DEFAULT_NOTE_WIDTH } from "../util/constants";
 
 export default function () {
   const { user } = useUser();
@@ -110,7 +111,13 @@ function Note({ note }: { note: Note }) {
       <div className="absolute top-1.5 right-1.5 grid grid-rows-3 justify-items-center">
         <button
           className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
-          onMouseDown={() => {
+          onMouseDown={(event) => {
+            if (event.metaKey) {
+              updateNoteKey(note.id, "width", DEFAULT_NOTE_WIDTH);
+              updateNoteKey(note.id, "height", DEFAULT_NOTE_WIDTH);
+              return;
+            }
+
             function onMouseMove(event: MouseEvent) {
               x.current = x.current + event.movementX;
               y.current = y.current + event.movementY;

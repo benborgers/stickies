@@ -2,7 +2,12 @@ import { atom, onMount } from "nanostores";
 import type Note from "../types/note";
 
 import PocketBase from "pocketbase";
-const pb = new PocketBase("https://pb-stickies.elk.sh");
+import {
+  POCKETBASE_ENDPOINT,
+  DEFAULT,
+  DEFAULT_NOTE_WIDTH,
+} from "../util/constants";
+const pb = new PocketBase(POCKETBASE_ENDPOINT);
 
 const notes = atom<Note[]>([]);
 export default notes;
@@ -13,7 +18,6 @@ export function loadNotes() {
       filter: "hidden = false",
     })
     .then((result) => {
-      console.log(result);
       notes.set(result as unknown as Note[]);
     });
 }
@@ -91,8 +95,8 @@ export const createNote = ({ x, y }: { x: number; y: number }) => {
     y,
     x,
     z: 999,
-    width: 250,
-    height: 250,
+    width: DEFAULT_NOTE_WIDTH,
+    height: DEFAULT_NOTE_WIDTH,
     hidden: false,
   };
 
