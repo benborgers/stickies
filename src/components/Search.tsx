@@ -78,19 +78,22 @@ export default function () {
 
     if (value.trim() === "") {
       return setResults(
-        await pb.collection("notes").getFullList({
-          filter: "hidden_at != null",
-          sort: "-hidden_at",
-          limit: 10,
-        })
+        (
+          await pb.collection("notes").getList(1, 10, {
+            filter: "hidden_at != null",
+            sort: "-hidden_at",
+          })
+        ).items as unknown as Note[]
       );
     }
 
     setResults(
-      await pb.collection("notes").getFullList({
-        filter: `hidden_at != null && text ~ "${value}"`,
-        sort: "-updated",
-      })
+      (
+        await pb.collection("notes").getList(1, 50, {
+          filter: `hidden_at != null && text ~ "${value}"`,
+          sort: "-hidden_at",
+        })
+      ).items as unknown as Note[]
     );
   }
 
