@@ -61,7 +61,7 @@ export default function () {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-white/20 grid place-items-center z-50"
+          className="fixed inset-0 bg-white/20 grid place-items-center z-50 p-4"
         >
           <motion.div className="w-full max-w-md mb-16" exit={{ y: 8 }}>
             <div className="rounded-2xl shadow bg-white/80 backdrop-blur-md p-4 text-sm space-y-2 font-medium text-gray-400">
