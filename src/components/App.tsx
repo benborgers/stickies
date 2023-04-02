@@ -15,7 +15,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import Search from "./Search";
 import ThemePicker from "./ThemePicker";
 import useUser from "../hooks/useUser";
-import { DEFAULT_NOTE_WIDTH } from "../util/constants";
+import {
+  DEFAULT_NOTE_WIDTH,
+  MIN_NOTE_WIDTH,
+  MIN_NOTE_HEIGHT,
+} from "../util/constants";
 
 export default function () {
   const { user } = useUser();
@@ -99,7 +103,6 @@ function Note({ note }: { note: Note }) {
         "absolute overflow-hidden",
         "shadow rounded-xl backdrop-blur-md",
         "[&::-webkit-resizer]:hidden",
-        "min-h-[85px] min-w-[130px]",
         "text-gray-950 text-sm font-medium"
       )}
       style={{
@@ -131,6 +134,14 @@ function Note({ note }: { note: Note }) {
             function onMouseMove(event: MouseEvent) {
               x.current = x.current + event.movementX;
               y.current = y.current + event.movementY;
+
+              if (x.current < 0) x.current = 0;
+              if (y.current < 0) y.current = 0;
+              if (x.current + width.current > window.innerWidth)
+                x.current = window.innerWidth - width.current;
+              if (y.current + height.current > window.innerHeight)
+                y.current = window.innerHeight - height.current;
+
               updateNoteKey(note.id, "x", x.current, { persist: false });
               updateNoteKey(note.id, "y", y.current, { persist: false });
             }
@@ -175,6 +186,15 @@ function Note({ note }: { note: Note }) {
           function onMouseMove(event: MouseEvent) {
             width.current = width.current + event.movementX;
             height.current = height.current + event.movementY;
+
+            if (width.current < MIN_NOTE_WIDTH) width.current = MIN_NOTE_WIDTH;
+            if (height.current < MIN_NOTE_HEIGHT)
+              height.current = MIN_NOTE_HEIGHT;
+            if (note.x + width.current > window.innerWidth)
+              width.current = window.innerWidth - note.x;
+            if (note.y + height.current > window.innerHeight)
+              height.current = window.innerHeight - note.y;
+
             updateNoteKey(note.id, "width", width.current, {
               persist: false,
             });
