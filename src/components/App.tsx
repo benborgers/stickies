@@ -106,8 +106,8 @@ function Note({ note }: { note: Note }) {
         left: note.x,
         top: note.y,
         zIndex: note.z,
-        height: width.current,
-        width: height.current,
+        width: width.current,
+        height: height.current,
       }}
       onMouseDown={() => {
         makeNoteHaveHighestZ(note.id);
@@ -173,8 +173,8 @@ function Note({ note }: { note: Note }) {
         className="cursor-se-resize h-5 w-5 absolute bottom-0 right-0"
         onMouseDown={() => {
           function onMouseMove(event: MouseEvent) {
-            width.current = width.current + event.movementY;
-            height.current = height.current + event.movementX;
+            width.current = width.current + event.movementX;
+            height.current = height.current + event.movementY;
             updateNoteKey(note.id, "width", width.current, {
               persist: false,
             });
