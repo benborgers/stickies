@@ -42,11 +42,11 @@ export default function () {
         style={{
           height:
             notes.length > 0
-              ? Math.max(...notes.map((note) => note.y + note.height)) + 24
+              ? Math.max(...notes.map((note) => note.y + note.height))
               : 0,
           width:
             notes.length > 0
-              ? Math.max(...notes.map((note) => note.x + note.width)) + 24
+              ? Math.max(...notes.map((note) => note.x + note.width))
               : 0,
         }}
         ref={container}
