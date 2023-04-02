@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import { ArrowsOutCardinal, MinusCircle, XCircle } from "phosphor-react";
+import tinykeys from "tinykeys";
 import Auth from "./Auth";
 import {
   createNote,
@@ -27,6 +28,25 @@ export default function () {
   const container = useRef(null);
 
   const lastContainerClick = useRef(0);
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      n: (event) => {
+        const target = event.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.contentEditable === "true") {
+          return;
+        }
+        createNote({ x: 24, y: 24 });
+      },
+      Escape: () => {
+        for (const id in window.tiptap_editors) {
+          window.tiptap_editors[id].commands.blur();
+        }
+      },
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <div>
