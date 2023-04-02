@@ -126,8 +126,10 @@ function Note({ note }: { note: Note }) {
           className="p-1 text-gray-950/10 hover:text-gray-950/40 transition-colors"
           onMouseDown={(event) => {
             if (event.metaKey) {
-              updateNoteKey(note.id, "width", DEFAULT_NOTE_WIDTH);
-              updateNoteKey(note.id, "height", DEFAULT_NOTE_WIDTH);
+              width.current = DEFAULT_NOTE_WIDTH;
+              height.current = DEFAULT_NOTE_WIDTH;
+              updateNoteKey(note.id, "width", width.current);
+              updateNoteKey(note.id, "height", height.current);
               return;
             }
 
