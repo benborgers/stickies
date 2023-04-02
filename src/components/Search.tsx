@@ -201,7 +201,7 @@ function truncateResult(text: string, query: string) {
 
   let snippet = text.slice(0, LENGTH);
 
-  if (query !== "" && !snippet.includes(query)) {
+  if (query !== "" && !snippet.toLowerCase().includes(query.toLowerCase())) {
     const PREFIX = 30;
     snippet = text.slice(
       text.toLowerCase().indexOf(query.toLowerCase()) - PREFIX,
