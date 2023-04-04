@@ -23,7 +23,6 @@ export default function ({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        horizontalRule: false,
         heading: {
           levels: [1],
         },
