@@ -93,6 +93,10 @@ export default function () {
           ))}
         </AnimatePresence>
       </div>
+
+      <p className="text-white/70 fixed left-3 bottom-3 font-semibold text-xs [text-shadow:1px_1px_3px_rgba(0,0,0,0.05)]">
+        ⌘K to search hidden notes
+      </p>
     </div>
   );
 }
