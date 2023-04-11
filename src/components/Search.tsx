@@ -41,7 +41,10 @@ export default function () {
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
-      "$mod+k": () => setOpen(true),
+      "$mod+k": (event) => {
+        event.preventDefault();
+        setOpen(true);
+      },
       ArrowUp: () => {
         if (!open) return;
         let nextVal = current - 1;
