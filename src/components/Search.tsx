@@ -3,15 +3,18 @@ import { Dialog } from "@headlessui/react";
 import tinykeys from "tinykeys";
 import { AnimatePresence, motion } from "framer-motion";
 import classNames from "classnames";
+import { useStore } from "@nanostores/react";
 import usePocketBase from "../hooks/usePocketBase";
 import type Note from "../types/note";
 import { makeNoteHaveHighestZ, updateNoteKey } from "../stores/notes";
 import useNotes from "../hooks/useNotes";
 import notesStore from "../stores/notes";
+import userStore from "../stores/user";
 
 export default function () {
   const pb = usePocketBase();
   const notes = useNotes();
+  const user = useStore(userStore);
 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -43,6 +46,7 @@ export default function () {
     const unsubscribe = tinykeys(window, {
       "$mod+k": (event) => {
         event.preventDefault();
+        if (!user) return;
         setOpen(true);
       },
       ArrowUp: () => {
@@ -72,7 +76,7 @@ export default function () {
     });
 
     return unsubscribe;
-  }, [results, current, open]);
+  }, [results, current, open, user]);
 
   async function onInputChange(event?: React.ChangeEvent<HTMLInputElement>) {
     const value = event ? event.target.value : "";
