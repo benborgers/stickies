@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import { ArrowsOutCardinal, MinusCircle, XCircle } from "phosphor-react";
 import tinykeys from "tinykeys";
+import { useStore } from "@nanostores/react";
+import userStore from "../stores/user";
 import Auth from "./Auth";
 import {
   createNote,
@@ -15,7 +17,6 @@ import Tiptap from "./Tiptap";
 import { AnimatePresence, motion } from "framer-motion";
 import Search from "./Search";
 import ThemePicker from "./ThemePicker";
-import useUser from "../hooks/useUser";
 import {
   DEFAULT_NOTE_WIDTH,
   MIN_NOTE_WIDTH,
@@ -23,7 +24,7 @@ import {
 } from "../util/constants";
 
 export default function () {
-  const { user } = useUser();
+  const user = useStore(userStore);
   const notes = useNotes();
   const container = useRef(null);
 

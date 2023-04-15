@@ -2,11 +2,12 @@ import { useState } from "react";
 import classNames from "classnames";
 import { CircleNotch } from "phosphor-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useStore } from "@nanostores/react";
 import Input from "./Input";
 import usePocketBase from "../hooks/usePocketBase";
 import catchPocketBase from "../util/catchPocketBase";
-import useUser from "../hooks/useUser";
 import { loadNotes } from "../stores/notes";
+import userStore, { refreshUser } from "../stores/user";
 
 type Mode = "login" | "signup";
 const Modes: Mode[] = ["login", "signup"];
@@ -18,7 +19,7 @@ const prettyMode = (mode: Mode): string =>
 
 export default function () {
   const pb = usePocketBase();
-  const { user, refreshUser } = useUser();
+  const user = useStore(userStore);
 
   const [currentMode, setCurrentMode] = useState<Mode>("login");
 
